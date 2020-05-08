@@ -8,6 +8,7 @@ services:
     ports:
       - 9501:9501
     volumes:
+      #设置日志存储目录，因为用于集群，注意该目录nfs共享
       - /opt/www:/opt/www/log
     deploy:
       replicas: 1
@@ -20,6 +21,7 @@ services:
         delay: 5s
         order: start-first
     networks:
+       #设置docker swarm的网络名字
       - default-network
     configs:
       - source: demo_v1.0
