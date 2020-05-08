@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  demo:
+    image: $REGISTRY_URL/$PROJECT_NAME:test
+    environment:
+      - "APP_PROJECT=demo"
+      - "APP_ENV=test"
+    ports:
+      - 9501:9501
+    volumes:
+      - /opt/www:/opt/www/log
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+      update_config:
+        parallelism: 2
+        delay: 5s
+        order: start-first
+    networks:
+      - default-network
+    configs:
+      - source: demo_v1.0
+        target: /opt/www/.env
+configs:
+  demo_v1.0:
+    external: true
+networks:
+  default-network:
+    external: true
